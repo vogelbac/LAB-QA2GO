@@ -14,7 +14,7 @@ The current version is 0.7.
 LAB-QA to go is licensed under the BSD license.
 
 # Support
-Laboratory for Multimodal Neuroimaging | [LMN](http://lmn-marburg.de/index.php/de/)
+[Laboratory for Multimodal Neuroimaging | LMN](http://lmn-marburg.de/index.php/de/)
 
 [Philipps-Universität Marburg](https://www.uni-marburg.de/en)
 
