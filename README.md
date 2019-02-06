@@ -9,3 +9,13 @@ The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.vir
 # Versions
 ## current version
 The current version is 0.7.
+
+# License
+LAB-QA to go is licensed under the BSD license.
+
+# Support
+Laboratory for Multimodal Neuroimaging | [LMN](http://lmn-marburg.de/index.php/de/)
+[Philipps-Universität Marburg](https://www.uni-marburg.de/en)
+
+# Copyright
+Copyright 2015-2019, Christoph Vogelbacher. Last updated on 2019-02-06.
