@@ -6,4 +6,6 @@ LAB–QA2GO is a light-weighted virtual machine which provides scripts for fully
 # Download
 The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.virtualbox.org/ "Official Virtual Box Site"). The image can be downloaded and must be imported at the client.
 
-
+# Versions
+## current version
+The curretn version is 0.7.
