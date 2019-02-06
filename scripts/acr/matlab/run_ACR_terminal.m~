@@ -1,0 +1,42 @@
+function run_ACR_terminal(localizer_path,t1_path,t2_path,result_path_in)
+    
+    global localizer_file t1_file t2_file result_path
+    global hdr img hdr1 img1 hdr2 img2 
+    
+    
+    localizer_file = localizer_path;
+    t1_file = t1_path;
+    t2_file = t2_path;
+    result_path = result_path_in;
+    
+    %Load Localizer
+    [hdr,img]=niak_read_vol(localizer_file);
+
+    %Load T1 Image
+    [hdr1,img1]=niak_read_vol(t1_file);
+
+    %Load T2 Image
+    [hdr2,img2]=niak_read_vol(t2_file);
+
+    %Geometric accuracy
+    geom_test()
+    %High-contrast spatial resolution
+    spatial_res_T1()
+    spatial_res_T2()
+    %Slice thickness accuracy
+    slice_th_T1()
+    slice_th_T2()
+    %Slice position accuracy
+    slice_pos_T1()
+    slice_pos_T2()
+    %Image intensity uniformity
+    piu_T1()
+    piu_T2()
+    %Percent-signal ghosting
+    ghosting_T1()
+    ghosting_T2()
+    %Low-contrast object detectability
+    lcod_t1()
+    lcod_t2()
+end
+
