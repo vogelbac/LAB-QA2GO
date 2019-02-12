@@ -19,8 +19,19 @@ The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.vir
 ## current version
 The current version is 0.7.
 
+#Feedback
+This is the first version of this tool. It is adapted to the data of our MRI lab at the University of Marburg. If you got a problem or questions just contact me, so that I can help you.
+
+
 # License
 LAB-QA2GO is licensed under the BSD license.
+
+# Preprint
+LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data
+Christoph Vogelbacher, Miriam H. A. Bopp, Verena Schuster, Peer Herholz, Jens Sommer, Andreas Jansen
+bioRxiv 546564; doi: https://doi.org/10.1101/546564
+
+
 
 # Support
 [Laboratory for Multimodal Neuroimaging | LMN](http://lmn-marburg.de/index.php/de/)
