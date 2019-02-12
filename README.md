@@ -22,6 +22,13 @@ The current version is 0.7.
 # License
 LAB-QA2GO is licensed under the BSD license.
 
+# Preprint
+LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data
+Christoph Vogelbacher, Miriam H. A. Bopp, Verena Schuster, Peer Herholz, Jens Sommer, Andreas Jansen
+bioRxiv 546564; doi: https://doi.org/10.1101/546564
+
+
+
 # Support
 [Laboratory for Multimodal Neuroimaging | LMN](http://lmn-marburg.de/index.php/de/)
 
