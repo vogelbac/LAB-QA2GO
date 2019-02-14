@@ -23,7 +23,11 @@ The current version is 0.7.
 This is the first version of this tool. It is adapted to the data of our MRI lab at the University of Marburg. If you got a problem or questions just contact me, so that I can help you.
 
 # License
-LAB-QA2GO is licensed under the BSD license.
+LAB-QA2GO is licensed under the BSD license for phantom data analysis.
+
+For human data analysis [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Licence "FSL Licence") routines are used in the current version. It is therefore not allowed to use LAB-QA2GO in commercial setup, when you are interested in human data analysis.
+
+Furthermore LAB-QA2GO is not intended as a clinical tool. It does not replace maintenance by a trained / skilled professional.
 
 # Preprint
 LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data
