@@ -287,17 +287,18 @@ for i in nifti_realnames_new_directory_list:
 					
 							real_path_list = os.listdir(real_path)
 						
+							phantom_date = ['-','-','-']
+							phantom_time = ['-','-']
+							helium = '-'
+							temperature = '-'
+							
 							if os.path.exists(real_path+'/_logfile.txt')	:	
 								logfile = read_logfile(real_path+'/_logfile.txt')
 								phantom_date = logfile[0].split('.')
 								phantom_time = logfile[1].split(':')
 								helium = logfile[3]
 								temperature = logfile[4]
-							else:
-								phantom_date = ['-','-','-']
-								phantom_time = ['-','-']
-								helium = '-'
-								temperature = '-'
+								
 					
 							#add ending for baseline (1) or after heating process (2) if nothing matches then a (0)
 							if ('004__ep2d_bold_TR2000' in k) or (general_settings[7] in k):
@@ -325,7 +326,7 @@ for i in nifti_realnames_new_directory_list:
 							for l in real_path_list:
 								if '.nii' in l:
 									#start matlab script
-									in_file = real_path +'/'+ l
+									in_file = real_path + l
 									os.chdir(gel_matlab_path)
 									subprocess.call ('octave --eval \"start_auswertung(\''+in_file+'\',\''+phantom_name_matlab+' \',\''+phantom_date[0]+' \',\''+phantom_date[1]+' \',\''+phantom_date[2]+' \',\''+phantom_time[0]+' \',\''+phantom_time[1]+' \',\''+helium +' \',\''+ temperature+'\')\"', shell=True)
 							
