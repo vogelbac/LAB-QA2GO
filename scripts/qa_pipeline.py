@@ -65,6 +65,9 @@ def read_logfile(path):
 	logfile = open(path,'r')
 	hel = '-'
 	temp = '-'
+	date = '-'
+	name = '-.-.-'
+	time = '-:-'
 	for k in logfile:
 		cut = k.strip()
 		#print cut
