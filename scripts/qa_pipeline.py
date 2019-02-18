@@ -24,6 +24,7 @@ import structural_make_overview
 import datetime
 import time
 import sys
+import re
 
 #define paths
 incoming_directory = '/home/brain/qa/conquest/data/incoming/'
