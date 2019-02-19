@@ -252,8 +252,6 @@ for i in nifti_realnames_new_directory_list:
 					# start octave
 					subprocess.call ('octave --eval \"run_ACR_terminal(\''+localizer_image+'\',\''+t1_image+' \',\''+t2_image+' \',\''+result_path+'\')\"', shell=True)
 					os.chdir(script_home_path)
-					# move folder 
-					shutil.move(nifti_realnames_new_directory+i+'/'+j+'/', nifti_realnames_done_directory+i+'/'+j+'/')
 					acr_run_value = True
 				
 				except:
