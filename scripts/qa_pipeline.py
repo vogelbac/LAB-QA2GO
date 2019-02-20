@@ -328,7 +328,7 @@ for i in nifti_realnames_new_directory_list:
 							for l in real_path_list:
 								if '.nii' in l:
 									#start matlab script
-									in_file = real_path + l
+									in_file = real_path +'/'+ l
 									os.chdir(gel_matlab_path)
 									subprocess.call ('octave --eval \"start_auswertung(\''+in_file+'\',\''+phantom_name_matlab+' \',\''+phantom_date[0]+' \',\''+phantom_date[1]+' \',\''+phantom_date[2]+' \',\''+phantom_time[0]+' \',\''+phantom_time[1]+' \',\''+helium +' \',\''+ temperature+'\')\"', shell=True)
 							
