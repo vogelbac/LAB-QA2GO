@@ -15,6 +15,41 @@ LAB–QA2GO is a light-weighted virtual machine which provides scripts for fully
 # Download
 The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.virtualbox.org/ "Official Virtual Box Site"). The image can be downloaded [here](https://osf.io/cqfpx/download "LAB-QA2GO download page on OSF"). After downloading the tool, you have to integrate the virtual machine into your Virtual Box client.
 
+# Quick Installation Guide
+## Download
+1.	Download LAB-QA2Go
+2.	Be sure VirtualBox is installed on your system
+3.	Open VirtualBox
+4.	Import the LAB-QA2Go tool as a virtual machine
+5.	(optional) open the configuration page of the tool and change the network settings if needed
+6.	Start the tool
+7.	Open the chromium browser of the virtual machine
+8.	Visit the _localhost_ page (this is the main page of the tool).
+9.	Click on _Configuration -> Network_ to get the IP address. Then you can access the tool of the host PC if the correct network setting of the virtual machine is used.
+
+## Preparation for the analysis (important)
+1.	Go the general configuration page _Configuration -> General_
+2.	Enable or disable the structural/functional human data analysis
+3.	Insert the identifiers in the corresponding fields to select the analysis pipeline. A description of the values is available at the LAB-QA2GO MediaWiki (_LABQA2GO-MediaWiki -> ConfigurationPageDescription_)
+4.	After inserting all identifier click on _**Update Configuration**_ to save the changes.
+
+## Starting a measurement (manual approach)
+1.	Make the data available for the tool by using a shared folder with the host system, an USB stick or a CD-ROM.
+2.	Go to _Start Calculation -> Start manual calculation_ 
+3.	If the data is available as DICOM files then the full path to the data has to be inserted into the field for the DICOM analysis. By pressing _**Start DICOM calculation**_ the data of this folder is copied to the virtual machine and then converted into NIfTI format.
+4.	If the data is present in NIfTI format the described folder structure has to be regard. Then the full path to the data has to be inserted into the field. . By pressing _**Start NIfTI calculation**_ the data of this folder is copied to the virtual machine.
+
+## Starting a measurement (automated approach)
+1.	To use this approach a PACS and the LAB-QA2GO tool has to be available in the same local network.
+2.	Maybe a port forwarding has to be added in the configuration of the virtual machine in VirtualBox.
+3.	The LAB-QA2GO tool has to be added as DICOM receiver in the PACS.
+4.	Then the data can be sent from the PACS to the LAB-QA2GO tool. 
+5.	Go to _Start Calculation -> Start automated calculation_ 
+6.	By pressing _**Start Automated calculation**_ the received data will be converted from DICOM to NIfTI and the calculation will be started. 
+
+# Sample Data
+A set of sample data will be soon available at DataLad.  
+
 # Versions
 ## current version
 The current version is 0.7.
