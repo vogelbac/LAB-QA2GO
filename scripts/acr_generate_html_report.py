@@ -209,10 +209,11 @@ def read_logfile(in_result_folder_terminal):
 				result_file.write('<td>0.9 mm</td><td>left</td>')
 				result_file.write('<td>'+logfile_list[x+40]+', '+logfile_list[x+42] +', '+ logfile_list[x+44] +', '+ logfile_list[x+46]+'</td>\n\t\t\t\t</tr>\n')
 				
-
-				image = glob.glob('resolution_*t1fl2d*')
-				result_file.write('\t\t\t</table>\n\t\t<p>\n\t\t\t	<img src="'+image[0]+'">\n\t\t</p>\n')
-				
+				try:
+					image = glob.glob('resolution_*t1fl2d*')
+					result_file.write('\t\t\t</table>\n\t\t<p>\n\t\t\t	<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t</table>\n\t\t<p>\n\t\t</p>\n')
 				#Test 2: Resolution T2
 				#find #3
 				x =  logfile_list.index('#3')
@@ -269,10 +270,11 @@ def read_logfile(in_result_folder_terminal):
 				result_file.write('<td>0.9 mm</td><td>left</td>')
 				result_file.write('<td>'+logfile_list[x+40]+', '+logfile_list[x+42] +', '+ logfile_list[x+44] +', '+ logfile_list[x+46]+'</td>\n\t\t\t\t</tr>\n')
 				
-
-				image = glob.glob('resolution_*pdt2*')
-				result_file.write('\n\t\t\t</table>	\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>')
-				
+				try:
+					image = glob.glob('resolution_*pdt2*')
+					result_file.write('\n\t\t\t</table>	\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>')
+				except:
+					result_file.write('\n\t\t\t</table>	\n\t\t<p>\n\t\t</p>')
 				
 				#Test 3: Slice Thickness 
 				#find #4 and #5
@@ -302,12 +304,16 @@ def read_logfile(in_result_folder_terminal):
 				result_file.write ('<td>'+logfile_list[y+11]+'</td>')
 				result_file.write ('<td>'+logfile_list[y+12]+'</td>\n\t\t\t\t</tr>\n')
 
-
-				image = glob.glob('Schichtdicke_*t1fl2d*')
-				result_file.write('\t\t\t</table>	\n\t\t\t<h4>T1</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('Schichtdicke_*pdt2*')
-				result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				
+				try:
+					image = glob.glob('Schichtdicke_*t1fl2d*')
+					result_file.write('\t\t\t</table>	\n\t\t\t<h4>T1</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t</table>	\n\t\t\t<h4>T1</h4>\n\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('Schichtdicke_*pdt2*')
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t</p>\n')				
 				# Test 4 Slice position accuracy
 				#find #6 and #7
 				x =  logfile_list.index('#6')
@@ -350,12 +356,16 @@ def read_logfile(in_result_folder_terminal):
 				result_file.write ('<td>12</td>')
 				result_file.write ('<td>'+logfile_list[y+14]+'</td>\n\t\t\t\t</tr>\n')
 				
-
-				image = glob.glob('Schichtposition_*t1fl2d*')
-				result_file.write('\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t\t\n\t\t<p><img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('Schichtposition_*pdt2*')
-				result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>')
-				
+				try:
+					image = glob.glob('Schichtposition_*t1fl2d*')
+					result_file.write('\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('Schichtposition_*pdt2*')
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>')
+				except:
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t</p>')
 				# Test 5 Image intensity uniformity
 				#find #8 and #9
 				x =  logfile_list.index('#8')
@@ -381,11 +391,16 @@ def read_logfile(in_result_folder_terminal):
 				result_file.write ('<td>'+logfile_list[y+10]+'</td>')
 				result_file.write ('<td>'+logfile_list[y+11]+'</td>\n\t\t\t\t</tr>\n')
 				
-				image = glob.glob('piu_*t1fl2d*')
-				result_file.write('\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p><img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('piu_*pdt2*')
-				result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				
+				try:
+					image = glob.glob('piu_*t1fl2d*')
+					result_file.write('\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p><img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('piu_*pdt2*')
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t</p>\n')
 				# Test 6 Percent-signal ghosting
 				#find #10 and #11
 				x =  logfile_list.index('#10')
@@ -411,12 +426,16 @@ def read_logfile(in_result_folder_terminal):
 				result_file.write ('<td>'+logfile_list[y+11]+'</td>')
 				result_file.write ('<td>'+logfile_list[y+12]+'</td>\n\t\t\t\t</tr>\n')
 				
-
-				image = glob.glob('Ghosting_*t1fl2d*')
-				result_file.write('\n\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p><img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('Ghosting_*pdt2*')
-				result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-
+				try:
+					image = glob.glob('Ghosting_*t1fl2d*')
+					result_file.write('\n\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p><img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\n\t\t\t</table>\n\t\t\t	<h4>T1</h4>\n\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('Ghosting_*pdt2*')
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t</p>\n')
 				# Test 7 LCOD
 				#find #12 and #13	
 				x =  logfile_list.index('#12')
@@ -443,22 +462,46 @@ def read_logfile(in_result_folder_terminal):
 				result_file.write ('<td>'+logfile_list[y+9]+', '+logfile_list[y+11]+', '+logfile_list[y+13]+', '+logfile_list[y+15]+'</td>')
 				result_file.write ('<td>&lt; 36 </td>')
 				result_file.write ('<td>'+logfile_list[y+19]+'</td>\n\t\t\t\t</tr>\n')
-				
-				image = glob.glob('LCOD_sl9_t1*')
-				result_file.write('\t\t\t</table>\n\t\t\t<h4>T1</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n')
-				image = glob.glob('LCOD_sl10_t1*')
-				result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('LCOD_sl11_t1*')
-				result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('LCOD_sl12_t1*')
-				result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('LCOD_sl9_t2*')
-				result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p><img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('LCOD_sl10_t2*')
-				result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('LCOD_sl11_t2*')
-				result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
-				image = glob.glob('LCOD_sl12_t2*')
-				result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n\t</body>\n</html>')
+				try:
+					image = glob.glob('LCOD_sl9_t1*')
+					result_file.write('\t\t\t</table>\n\t\t\t<h4>T1</h4>\n\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n')
+				except:
+					result_file.write('\t\t\t</table>\n\t\t\t<h4>T1</h4>\n\t\t<p>\n')
+				try:
+					image = glob.glob('LCOD_sl10_t1*')
+					result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('LCOD_sl11_t1*')
+					result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('LCOD_sl12_t1*')
+					result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('LCOD_sl9_t2*')
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p><img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t\t<h4>T2</h4>\n\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('LCOD_sl10_t2*')
+					result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t<p>\n\t\t</p>\n')
+				try:				
+					image = glob.glob('LCOD_sl11_t2*')
+					result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n')
+				except:
+					result_file.write('\t\t<p>\n\t\t</p>\n')
+				try:
+					image = glob.glob('LCOD_sl12_t2*')
+					result_file.write('\t\t<p>\n\t\t\t<img src="'+image[0]+'">\n\t\t</p>\n\t</body>\n</html>')
+				except:
+					result_file.write('\t\t<p>\n\t\t</p>\n\t</body>\n</html>')
 
+				result_file.close()
 
