@@ -48,7 +48,7 @@ The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.vir
 6.	By pressing _**Start Automated calculation**_ the received data will be converted from DICOM to NIfTI and the calculation will be started. 
 
 # Sample Data
-A set of sample data will be soon available at DataLad.  
+A set of sample data can be downloaded [here](http://www.online.uni-marburg.de/quamri/labqa2go/LABQA2GO_sample_data.zip "LAB-QA2GO sample data").  
 
 # Versions
 ## current version
