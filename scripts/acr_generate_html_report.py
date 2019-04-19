@@ -35,6 +35,36 @@ def read_logfile(in_result_folder_terminal):
 				result_file = open(resultpath+'results.html','w')
 				result_file.writelines(menu_html)
 				result_file.write('\t\t<h1 style="margin-top:80px;">ACR Results '+result_date+'</h1>\n')
+
+
+				result_file.write('\t\t<h2>DICOM header comparison</h2>\n')
+				try:
+					header_file = open(resultpath+'header.txt','r')
+
+					result_file.write('\t\t<table>\n\t\t\t<th><td colspan="3"><b>DICOM header comparison</b></td></th>')
+
+					result_file.write('\t\t\t<tr><td><b>Field name</b></td><td><b>Reference value</b></td><td><b>Value in data</b></td></tr>\n')
+
+					for k in header_file:
+						header_line = k.split(';')
+						if len(header_line) == 3:
+							result_file.write('\t\t\t<tr><td><i>'+header_line[0]+'</i></td><td>'+header_line[1]+'</td><td>'+header_line[2]+'</td></tr>\n')
+						else:
+							header_line2 = k.split(',')
+							if len(header_line2) == 3:
+								result_file.write('\t\t\t<tr><td><i>'+header_line2[0]+'</i></td><td>'+header_line2[1]+'</td><td>'+header_line2[2]+'</td></tr>\n')
+
+					result_file.write('\t\t</table>\n')
+					result_file.write('\t\t<p></p>\n')
+					
+					header_file.close()
+				except:
+					result_file.write('\t\t<p>No differences between headers or no DICOM file to compare available.</p>\n')
+
+
+
+
+
 				#Test 1: Geometic
 				#find #1
 				x =  logfile_list.index('#1')

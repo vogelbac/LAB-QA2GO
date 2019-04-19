@@ -8,13 +8,13 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 def make_graphs(script_path , in_file, name,measurement):
-	
 	os.chdir(script_path)
 
 	rfile = open(in_file,'r')
-	
+
 
 	lines = rfile.readlines()
+
 
 	rotx = []
 	roty = []
@@ -24,7 +24,6 @@ def make_graphs(script_path , in_file, name,measurement):
 	transz = []
 
 	for i in lines:
-		#print (i)
 		entry = i.split(' ')
 		#print (entry)
 		rotx.append(float(entry[0].replace(',','.')))

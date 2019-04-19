@@ -19,6 +19,7 @@ matplotlib.use( 'Agg' )
 
 import pylab
 import parse_ini_file
+import numpy
 
 
 
@@ -29,6 +30,16 @@ menu_html_file.close()
 
 	
 def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_values):
+
+	phantom_settings = parse_ini_file.parse_ini_file('phantom_settings')
+	if phantom_settings[13] == 0:
+		automatic_flag = False
+	else: 
+		automatic_flag = True
+
+	std_automatic_multiplier = phantom_settings[14]
+	
+	
 	rfile = open(overview_logfile,'r')
 
 	lines = rfile.readlines()
@@ -50,8 +61,9 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 
 	for i in lines:
 		entry = i.split('\t')
-		date_pre_list = entry[0].split('_')
-		date_list.append(date_pre_list[-4]+'-'+date_pre_list[-3]+'-'+date_pre_list[-2]+'-'+date_pre_list[-1])
+		date_pre_list = entry[0].split('_')		
+		#date_list.append(date_pre_list[-4]+'-'+date_pre_list[-3]+'-'+date_pre_list[-2]+'-'+date_pre_list[-1])
+		date_list.append(entry[0])
 		snr.append(float(entry[1].replace(',','.')))
 		sfnr.append(float(entry[5].replace(',','.')))
 		fluctuation.append(float(entry[6].replace(',','.')))
@@ -233,6 +245,22 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 		psg_overview_tickrota=90
 
 
+	#calculate mean und std.
+	snr_mean = numpy.mean(snr)
+	snr_std = numpy.std(snr) * float(std_automatic_multiplier)
+	sfnr_mean = numpy.mean(sfnr)
+	sfnr_std = numpy.std(sfnr) * float(std_automatic_multiplier)
+	fluctuation_mean = numpy.mean(fluctuation)
+	fluctuation_std = numpy.std(fluctuation) * float(std_automatic_multiplier)
+	drift_mean = numpy.mean(drift)
+	drift_std = numpy.std(drift) * float(std_automatic_multiplier)
+	psc_mean = numpy.mean(psc)
+	psc_std = numpy.std(psc) * float(std_automatic_multiplier)
+	psg_mean = numpy.mean(psg_signal_image)
+	psg_std = numpy.std(psg_signal_image) * float(std_automatic_multiplier)
+	
+	
+
 	#SNR
 	matplotlib.pyplot.figure(figsize=(snr_overview_width,snr_overview_height))
 	matplotlib.pyplot.plot(numElements, snr, 'bo',markersize=4)
@@ -242,13 +270,20 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Date')
 	axes.set_ylabel('SNR')
-	axes.axhspan(minus_snr, plus_snr, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((snr_mean-snr_std), (snr_mean+snr_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_snr, plus_snr, alpha=0.5, color='green')
 	ymin = min(snr[-int(number_of_shown_values):]) - 50
 	ymax = max(snr[-int(number_of_shown_values):]) + 50 
 	axes.set_ylim([ymin,ymax])
 	axes.yaxis.grid()
-	green_patch = matplotlib.patches.Patch(color='green', label='SNR range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=snr_overview_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean SNR +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=snr_overview_fontsize)		
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='SNR range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=snr_overview_fontsize)
 	matplotlib.pyplot.tight_layout()
 	matplotlib.pyplot.savefig('snr')
 
@@ -265,14 +300,21 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Date')
 	axes.set_ylabel('SFNR')
-	axes.axhspan(minus_sfnr, plus_sfnr, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((sfnr_mean-sfnr_std), (sfnr_mean+sfnr_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_sfnr, plus_sfnr, alpha=0.5, color='green')
 	ymin = min(sfnr[-int(number_of_shown_values):]) - 50
 	ymax = max(sfnr[-int(number_of_shown_values):]) + 50 
 	axes.set_ylim([ymin,ymax])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='SFNR range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=sfnr_overview_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean SFNR +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=sfnr_overview_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='SFNR range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=sfnr_overview_fontsize)
 	matplotlib.pyplot.savefig('sfnr')
 
 
@@ -289,14 +331,21 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Date')
 	axes.set_ylabel('Fluctuation')
-	axes.axhspan(minus_fluct, plus_fluct, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((fluctuation_mean-fluctuation_std), (fluctuation_mean+fluctuation_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_fluct, plus_fluct, alpha=0.5, color='green')
 	ymin = 0
 	ymax = max(fluctuation[-int(number_of_shown_values):]) + 1
 	axes.set_ylim([ymin,ymax])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Fluctuation range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=fluctuation_overview_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean Fluctuation +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=fluctuation_overview_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Fluctuation range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=fluctuation_overview_fontsize)
 	matplotlib.pyplot.savefig('fluctuation')
 
 
@@ -310,14 +359,21 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Date')
 	axes.set_ylabel('Drift')
-	axes.axhspan(minus_drift, plus_drift, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((drift_mean-drift_std), (drift_mean+drift_std), alpha=0.5, color='blue')
+	else:	
+		axes.axhspan(minus_drift, plus_drift, alpha=0.5, color='green')
 	ymin = 0
 	ymax = max(drift[-int(number_of_shown_values):]) + 1
 	axes.set_ylim([ymin,ymax])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Drift range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=drift_overview_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean Drift +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=drift_overview_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Drift range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=drift_overview_fontsize)
 	matplotlib.pyplot.savefig('drift')
 
 
@@ -331,14 +387,21 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Date')
 	axes.set_ylabel('PSC')
-	axes.axhspan(minus_psc, plus_psc, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((psc_mean-psc_std), (psc_mean+psc_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_psc, plus_psc, alpha=0.5, color='green')
 	ymin = 0
 	ymax = max(psc[-int(number_of_shown_values):]) + 1.5
 	axes.set_ylim([ymin,ymax])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='PSC range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=psc_overview_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean PSC +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=psc_overview_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='PSC range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=psc_overview_fontsize)
 	matplotlib.pyplot.savefig('psc')
 
 	#PSG
@@ -350,34 +413,54 @@ def generate_graph(overview_logfile,matlab_path,resultpath,number_of_shown_value
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Date')
 	axes.set_ylabel('PSG Signal Image')
-	axes.axhspan(minus_psg, plus_psg, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((psg_mean-psg_std), (psg_mean+psg_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_psg, plus_psg, alpha=0.5, color='green')
 	ymin = 0
 	ymax = max(psg_signal_image[-int(number_of_shown_values):]) + 0.25
 	axes.set_ylim([ymin,ymax])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='PSC range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=psg_overview_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean PSG +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=psg_overview_fontsize)
+	else:	
+		green_patch = matplotlib.patches.Patch(color='green', label='PSC range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=psg_overview_fontsize)
 	matplotlib.pyplot.savefig('psg_signal_image')
 
 
 	outlier = []
-	for i in range(0,len(date_list)):
-		if snr[i] < minus_snr or snr[i]> plus_snr:
-			outlier.append(date_list[i].replace('-','_'))
-		if sfnr[i] < minus_sfnr or snr[i]> plus_sfnr:
-			outlier.append(date_list[i].replace('-','_'))
-		if drift[i] < minus_drift or drift[i]> plus_drift:
-			outlier.append(date_list[i].replace('-','_'))
-		if fluctuation[i] < minus_fluct or fluctuation[i]> plus_fluct:
-			outlier.append(date_list[i].replace('-','_'))
-		if psc[i] < minus_psc or psc[i]> plus_psc:
-			outlier.append(date_list[i].replace('-','_'))
-		if psg_signal_image[i] < minus_psg or psg_signal_image[i]> plus_psg:
-			outlier.append(date_list[i].replace('-','_'))
+	if automatic_flag:
+		for i in range(0,len(date_list)):
+			if snr[i] < snr_mean-snr_std or snr[i]> snr_mean+snr_std:
+				outlier.append(date_list[i].replace('-','_'))
+			if sfnr[i] < sfnr_mean-sfnr_std or snr[i]> sfnr_mean+sfnr_std:
+				outlier.append(date_list[i].replace('-','_'))
+			if drift[i] < drift_mean-drift_std or drift[i]> drift_mean+drift_std:
+				outlier.append(date_list[i].replace('-','_'))
+			if fluctuation[i] < fluctuation_mean-fluctuation_std or fluctuation[i]> fluctuation_mean+fluctuation_std:
+				outlier.append(date_list[i].replace('-','_'))
+			if psc[i] < psc_mean-psc_std or psc[i]> psc_mean+psc_std:
+				outlier.append(date_list[i].replace('-','_'))
+			if psg_signal_image[i] < psg_mean-psg_std or psg_signal_image[i]> psg_mean+psg_std:
+				outlier.append(date_list[i].replace('-','_'))
+	else:
+		for i in range(0,len(date_list)):
+			if snr[i] < minus_snr or snr[i]> plus_snr:
+				outlier.append(date_list[i].replace('-','_'))
+			if sfnr[i] < minus_sfnr or snr[i]> plus_sfnr:
+				outlier.append(date_list[i].replace('-','_'))
+			if drift[i] < minus_drift or drift[i]> plus_drift:
+				outlier.append(date_list[i].replace('-','_'))
+			if fluctuation[i] < minus_fluct or fluctuation[i]> plus_fluct:
+				outlier.append(date_list[i].replace('-','_'))
+			if psc[i] < minus_psc or psc[i]> plus_psc:
+				outlier.append(date_list[i].replace('-','_'))
+			if psg_signal_image[i] < minus_psg or psg_signal_image[i]> plus_psg:
+				outlier.append(date_list[i].replace('-','_'))
 
-
-	 	
 	return outlier
 	
 	# HTML
@@ -399,17 +482,16 @@ def generate_html(resultpath,outlier):
 	result_list.sort(reverse=True)
 	for i in result_list:
 		if os.path.isdir(resultpath+i):
-			result_file.write('\t\t\t<li>'+i+'</li>\n')
-			result_file.write('\t\t\t<li>\n\t\t\t\t<ul>\n')
+			result_file.write('\t\t\t<h3>'+i+'</h3>\n')
+			result_file.write('\t\t\t<ul>\n')
 			temp = os.listdir(resultpath+i)
 			for j in temp:
 				if os.path.isdir(resultpath+i):
-					if j in outlier:
-						result_file.write('\t\t\t\t\t<li><img src="/warning.png"><a href="'+i+'/'+j+'/results.html">'+j+'</a></li>\n')
+					if any(j in s for s in outlier):
+						result_file.write('\t\t\t\t<li><img src="/warning.png"><a href="'+i+'/'+j+'/results.html">'+j+'</a></li>\n')
 					else:
-						result_file.write('\t\t\t\t\t<li><a href="'+i+'/'+j+'/results.html">'+j+'</a></li>\n')
-			result_file.write('\t\t\t\t</ul>\n\t\t\t</li>\n')
-	result_file.write('\t\t</ul>\n')	
+						result_file.write('\t\t\t\t<li><a href="'+i+'/'+j+'/results.html">'+j+'</a></li>\n')
+			result_file.write('\t\t\t</ul>\n')	
 	result_file.write('\t</body>\n</html>')
 	
 def main(overview_logfile,matlab_path,resultpath,number_of_shown_values):

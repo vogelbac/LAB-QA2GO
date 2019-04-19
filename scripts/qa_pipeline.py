@@ -25,6 +25,7 @@ import datetime
 import time
 import sys
 import re
+import read_dicom_header
 
 #define paths
 incoming_directory = '/home/brain/qa/conquest/data/incoming/'
@@ -80,8 +81,8 @@ def read_logfile(path):
 		if cut.find('Patient Comments')>-1:
 			line = cut.split()
 			#search for helium and temperature
-			hel_string = re.findall(r'[Hh][_?]\d+[.,]?\d+?',line[6])
-			temp_string = re.findall(r'[Tt][_?]\d+[.,]?\d+?',line[6])
+			hel_string = re.findall(r'[Hh][_?]\d+[.,]?\d+?',line[-1])
+			temp_string = re.findall(r'[Tt][_?]\d+[.,]?\d+?',line[-1])
 			if hel_string:			
 				hel_value = re.findall(r'\d+[.,]?\d+?',hel_string[0])
 				hel = hel_value[0].replace(',','.')
@@ -149,6 +150,7 @@ if (len(sys.argv) == 3 and sys.argv[1] == 'nifti'):
 		input_list = os.listdir(sys.argv[2])
 		#copy data from input to custom_new_directory
 		for i in input_list:
+			#test if folder exists
 			shutil.copytree(sys.argv[2]+i,nifti_realnames_new_directory+i)
 			shutil.copytree(sys.argv[2]+i,nifti_directory+i)
 		use_nifti = True
@@ -166,6 +168,7 @@ func_run_value = False
 structural_run_value = False
 acr_run_value = False
 gel_run_value = False
+
 
 
 
@@ -193,7 +196,7 @@ for i in nifti_realnames_new_directory_list:
 					if ('001__localizer' in k) or ('002__localizer' in k) or (general_settings[9] in j):
 						try:
 							if use_nifti:
-								real_path = nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'
+								real_path = nifti_realnames_new_directory+i+'/'+j+'/'+k
 							else:
 								real_path = (os.path.realpath(nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'))
 								subprocess.call('gunzip '+real_path+'/*.gz' , shell=True)
@@ -212,11 +215,31 @@ for i in nifti_realnames_new_directory_list:
 					if ('002__t1_fl2d_tra' in k) or ('003__t1_fl2d_tra' in k) or (general_settings[10] in j):
 						try:
 							if use_nifti:
-								real_path = nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'
+								real_path = nifti_realnames_new_directory+i+'/'+j+'/'+k
 							else:
 								real_path = (os.path.realpath(nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'))
 								subprocess.call('gunzip '+real_path+'/*.gz' , shell=True)
+								#dicom header comparison
+								real_path2 = real_path.split('/')
+								del real_path2[-2]
+								real_path3 = '/'
+								for p in real_path2:
+									if p:
+										if p == 'nifti':
+											real_path3=real_path3+'dicom/converted/'
+										else:
+											real_path3=real_path3+p+'/'
+								
+								real_path3_list = os.listdir(real_path3)
+								if real_path3_list[1].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[1]		
+								elif real_path3_list[2].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[2]
+								elif real_path3_list[3].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[3]							
+							
 							real_path_list = os.listdir(real_path)
+						
 							for l in os.listdir(real_path):
 								if l.endswith('.nii'):
 									t1_image = real_path+'/'+l
@@ -231,7 +254,7 @@ for i in nifti_realnames_new_directory_list:
 					if ('003__pd+t2_tse_tra' in k) or ('004__pd+t2_tse_tra' in k) or (general_settings[11] in j):
 						try:
 							if use_nifti:
-								real_path = nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'
+								real_path = nifti_realnames_new_directory+i+'/'+j+'/'+k
 							else:
 								real_path = (os.path.realpath(nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'))
 								subprocess.call('gunzip '+real_path+'/*.gz' , shell=True)
@@ -251,7 +274,12 @@ for i in nifti_realnames_new_directory_list:
 					os.chdir(acr_matlab_path)
 					# start octave
 					subprocess.call ('octave --eval \"run_ACR_terminal(\''+localizer_image+'\',\''+t1_image+' \',\''+t2_image+' \',\''+result_path+'\')\"', shell=True)
+
+					if not use_nifti:
+						read_dicom_header.main(dcm_file, 'ACR', result_path)
 					os.chdir(script_home_path)
+					# move folder 
+					#shutil.move(nifti_realnames_new_directory+i+'/'+j+'/', nifti_realnames_done_directory+i+'/'+j+'/')
 					acr_run_value = True
 				
 				except:
@@ -267,7 +295,7 @@ for i in nifti_realnames_new_directory_list:
 				# phantom name convention for center marburg 
 				# YYYYMMDD_AGB_QA_ACR_Phantom 
 				# phantom name will be YYYY_MM_DD
-				# phantom_name = j.split('_')[0][0:4]+'_'+j.split('_')[0][4:6]+'_'+j.split('_')[0][6:8]
+				#phantom_name = j.split('_')[0][0:4]+'_'+j.split('_')[0][4:6]+'_'+j.split('_')[0][6:8]
 				phantom_name = j
 				#if prae or post measurement for example before and after maintanance service should be performed
 				if ('Prae' in j) or ('vor' in j) or ('Vor' in j) or (general_settings[5] in j):
@@ -277,6 +305,7 @@ for i in nifti_realnames_new_directory_list:
 				if not os.path.exists(gel_result_directory + phantom_name + '/'):
 					os.mkdir(gel_result_directory + phantom_name)
 				result_path = gel_result_directory + phantom_name + '/'
+
 				for k in nifti_realnames_new_sub_gel_directory_list:
 					if ('004__ep2d_bold_TR2000' in k) or ('008__ep2d_bold_TR2000' in k) or (general_settings[7] in k) or(general_settings[8] in k):
 						phantom_name_matlab = ''
@@ -286,22 +315,38 @@ for i in nifti_realnames_new_directory_list:
 							else:
 								real_path = (os.path.realpath(nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'))
 								subprocess.call('gunzip '+real_path+'/*.gz' , shell=True)
-					
+							
+								real_path2 = real_path.split('/')
+								del real_path2[-2]
+								real_path3 = '/'
+								for p in real_path2:
+									if p:
+										if p == 'nifti':
+											real_path3=real_path3+'dicom/converted/'
+										else:
+											real_path3=real_path3+p+'/'
+								
+								real_path3_list = os.listdir(real_path3)
+								if real_path3_list[1].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[1]		
+								elif real_path3_list[2].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[2]
+								elif real_path3_list[3].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[3]
+
 							real_path_list = os.listdir(real_path)
-						
 							phantom_date = ['-','-','-']
 							phantom_time = ['-','-']
 							helium = '-'
 							temperature = '-'
-							
-							if os.path.exists(real_path+'/_logfile.txt')	:	
-								logfile = read_logfile(real_path+'/_logfile.txt')
+						
+							if os.path.exists(real_path+'_logfile.txt')	:	
+								logfile = read_logfile(real_path+'_logfile.txt')
 								phantom_date = logfile[0].split('.')
 								phantom_time = logfile[1].split(':')
 								helium = logfile[3]
 								temperature = logfile[4]
-								
-					
+						
 							#add ending for baseline (1) or after heating process (2) if nothing matches then a (0)
 							if ('004__ep2d_bold_TR2000' in k) or (general_settings[7] in k):
 								phantom_name_matlab = phantom_name+'_1'
@@ -309,6 +354,7 @@ for i in nifti_realnames_new_directory_list:
 								phantom_name_matlab = phantom_name+'_2'
 							else:
 								phantom_name_matlab = phantom_name+'_0'						
+
 
 							os.mkdir(gel_result_directory + phantom_name +'/'+phantom_name_matlab)
 							result_path_matlab = gel_result_directory + phantom_name +'/'+phantom_name_matlab+'/'
@@ -325,17 +371,20 @@ for i in nifti_realnames_new_directory_list:
 							error_log_file.close()
 
 						try:
+	
+							real_path_list = os.listdir(real_path)	
+					
 							for l in real_path_list:
+
 								if '.nii' in l:
-									#start matlab script
 									in_file = real_path +'/'+ l
+									#start matlab script
 									os.chdir(gel_matlab_path)
 									subprocess.call ('octave --eval \"start_auswertung(\''+in_file+'\',\''+phantom_name_matlab+' \',\''+phantom_date[0]+' \',\''+phantom_date[1]+' \',\''+phantom_date[2]+' \',\''+phantom_time[0]+' \',\''+phantom_time[1]+' \',\''+helium +' \',\''+ temperature+'\')\"', shell=True)
-							
-			
-									#copy into result folder
 									subprocess.call('mv '+gel_matlab_path+'*.png '+result_path_matlab,shell=True)
 									subprocess.call('mv '+gel_matlab_path+'*.txt '+result_path_matlab,shell=True)
+									if not use_nifti:
+										read_dicom_header.main(dcm_file, 'GEL', result_path_matlab)
 									os.chdir(script_home_path)
 						except:
 							subprocess.call('rm -rf '+gel_matlab_path+'*.png',shell=True)							
@@ -364,6 +413,43 @@ for i in nifti_realnames_new_directory_list:
 					else:					
 						real_path = (os.path.realpath(nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'))
 						subprocess.call('gunzip '+real_path+'/*.gz' , shell=True)
+						try:
+							real_path2 = real_path.split('/')
+							real_path3 = '/'
+							for p in real_path2:
+								if p:
+									if p == 'nifti':
+										real_path3=real_path3+'dicom/converted/'
+									else:
+										real_path3=real_path3+p+'/'
+						
+							real_path3_list = os.listdir(real_path3)
+							if real_path3_list[1].endswith('.dcm'):
+								dcm_file = real_path3+real_path3_list[1]		
+							elif real_path3_list[2].endswith('.dcm'):
+								dcm_file = real_path3+real_path3_list[2]
+							elif real_path3_list[3].endswith('.dcm'):
+								dcm_file = real_path3+real_path3_list[3]
+
+						except:
+							real_path2 = real_path.split('/')
+							del real_path2[-2]
+							real_path3 = '/'
+							for p in real_path2:
+								if p:
+									if p == 'nifti':
+										real_path3=real_path3+'dicom/converted/'
+									else:
+										real_path3=real_path3+p+'/'
+						
+							real_path3_list = os.listdir(real_path3)
+							if real_path3_list[1].endswith('.dcm'):
+								dcm_file = real_path3+real_path3_list[1]		
+							elif real_path3_list[2].endswith('.dcm'):
+								dcm_file = real_path3+real_path3_list[2]
+							elif real_path3_list[3].endswith('.dcm'):
+								dcm_file = real_path3+real_path3_list[3]
+					
 					real_path_list = os.listdir(real_path)
 					# create result directories
 					if not os.path.exists(structural_result_directory+i):
@@ -373,6 +459,9 @@ for i in nifti_realnames_new_directory_list:
 					temp_result_directory = structural_result_directory+ i + '/' + j +'/'+k
 					if not os.path.exists(structural_result_directory+i+'/'+j + '/' + k):
 						os.mkdir(temp_result_directory)
+
+					
+			
 
 					try:
 						for l in real_path_list:
@@ -387,8 +476,11 @@ for i in nifti_realnames_new_directory_list:
 								subprocess.call ('octave --eval \"t1_noise_histogram(\''+image_path+'\',\''+mask_path+'\',\''+default_threshold_faktor+'\')\"', shell=True)
 								subprocess.call('mv '+structural_matlab_path+'*.png '+temp_result_directory,shell=True)
 								subprocess.call('mv '+structural_matlab_path+'*.txt '+temp_result_directory,shell=True)
-				
-								structural_make_html_report.main(temp_result_directory, name)
+								if not use_nifti:
+									header_comp = read_dicom_header.main(dcm_file, 'Struct', '')
+								else: 
+									header_comp = []
+								structural_make_html_report.main(temp_result_directory, name, header_comp)
 								structural_run_value = True
 					except:
 						shutil.rmtree(temp_result_directory, ignore_errors=True)
@@ -402,12 +494,53 @@ for i in nifti_realnames_new_directory_list:
 				
 				#human functional workflow- movement parameters
 				if (('ep2d' in k) or (general_settings[12] in k)) and (general_settings[1] == '1'):
-					try:					
+					try:	
+			
 						if use_nifti:
 							real_path = nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'
 						else:
 							real_path = (os.path.realpath(nifti_realnames_new_directory+i+'/'+j+'/'+k+'/'))
 							subprocess.call('gunzip '+real_path+'/*.gz' , shell=True)
+
+							try:
+								real_path2 = real_path.split('/')
+								real_path3 = '/'
+								for p in real_path2:
+									if p:
+										if p == 'nifti':
+											real_path3=real_path3+'dicom/converted/'
+										else:
+											real_path3=real_path3+p+'/'
+						
+								real_path3_list = os.listdir(real_path3)
+								if real_path3_list[1].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[1]		
+								elif real_path3_list[2].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[2]
+								elif real_path3_list[3].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[3]
+
+							except:
+								real_path2 = real_path.split('/')
+								del real_path2[-2]
+								real_path3 = '/'
+								for p in real_path2:
+									if p:
+										if p == 'nifti':
+											real_path3=real_path3+'dicom/converted/'
+										else:
+											real_path3=real_path3+p+'/'
+						
+								real_path3_list = os.listdir(real_path3)
+								if real_path3_list[1].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[1]		
+								elif real_path3_list[2].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[2]
+								elif real_path3_list[3].endswith('.dcm'):
+									dcm_file = real_path3+real_path3_list[3]
+				
+
+
 						real_path_list = os.listdir(real_path)
 						#create resulfolder
 						if not os.path.exists(functional_result_directory+i):
@@ -418,6 +551,9 @@ for i in nifti_realnames_new_directory_list:
 						if not os.path.exists(functional_result_directory+i+'/'+j + '/' + k):
 							os.mkdir(temp_result_directory)
 				
+						
+						
+						
 
 				
 						for l in real_path_list:
@@ -426,10 +562,13 @@ for i in nifti_realnames_new_directory_list:
 								subprocess.call('fsl5.0-mcflirt -in '+real_path+'/'+l +' -plots', shell=True)
 								subprocess.call('fsl5.0-fslinfo '+real_path+'/'+l +' > '+real_path+'/'+l+'_info.txt'  , shell=True)
 								fmri_generate_graph.make_graphs(functional_matlab_path , real_path+'/'+name+'_mcf.par', name,j)
-								subprocess.call('mv '+functional_matlab_path+'*.png '+temp_result_directory,shell=True)
+								subprocess.call('mv '+functional_matlab_path+'*.png '+temp_result_directory,shell=True)						
 								subprocess.call('mv '+functional_matlab_path+'values.txt '+temp_result_directory,shell=True)
-
-								fmri_make_html_report.main(temp_result_directory,name)
+								if not use_nifti:
+									header_comp = read_dicom_header.main(dcm_file, 'FMRI', '')
+								else:
+									header_comp = []
+								fmri_make_html_report.main(temp_result_directory,name, header_comp)
 					
 						func_run_value = True
 					except:
@@ -446,8 +585,6 @@ for i in nifti_realnames_new_directory_list:
 	if os.path.exists(nifti_realnames_new_directory+i) and len(os.listdir(nifti_realnames_new_directory+i)) == 0:
 		os.rmdir(nifti_realnames_new_directory+i)
 		
-
-
 
 # collect and create results	
 if (func_run_value): 

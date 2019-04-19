@@ -14,10 +14,19 @@ import matplotlib
 matplotlib.use( 'Agg' )
 
 import pylab
-
+import numpy
 import parse_ini_file
 
 def read_values_file(functional_result_directory, number_of_shown_values):
+
+	functional_settings = parse_ini_file.parse_ini_file('fmri_settings')
+	if functional_settings[3] == 0:
+		automatic_flag = False
+	else: 
+		automatic_flag = True
+
+	std_automatic_multiplier = functional_settings[4]
+
 
 	os.chdir(functional_result_directory)
 
@@ -78,24 +87,24 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 	for i in lines:
 		entry = i.split('\t')
 		name.append(entry[0]+'\n'+entry[1])
-		rotx_mean.append(entry[2])
-		rotx_min.append(entry[3])
-		rotx_max.append(entry[4])
-		roty_mean.append(entry[5])
-		roty_min.append(entry[6])
-		roty_max.append(entry[7])
-		rotz_mean.append(entry[8])
-		rotz_min.append(entry[9])
-		rotz_max.append(entry[10])
-		transx_mean.append(entry[11])
-		transx_min.append(entry[12])
-		transx_max.append(entry[13])
-		transy_mean.append(entry[14])
-		transy_min.append(entry[15])
-		transy_max.append(entry[16])
-		transz_mean.append(entry[17])
-		transz_min.append(entry[18])
-		transz_max.append(entry[19].split('\n')[0])
+		rotx_mean.append(float(entry[2]))
+		rotx_min.append(float(entry[3]))
+		rotx_max.append(float(entry[4]))
+		roty_mean.append(float(entry[5]))
+		roty_min.append(float(entry[6]))
+		roty_max.append(float(entry[7]))
+		rotz_mean.append(float(entry[8]))
+		rotz_min.append(float(entry[9]))
+		rotz_max.append(float(entry[10]))
+		transx_mean.append(float(entry[11]))
+		transx_min.append(float(entry[12]))
+		transx_max.append(float(entry[13]))
+		transy_mean.append(float(entry[14]))
+		transy_min.append(float(entry[15]))
+		transy_max.append(float(entry[16]))
+		transz_mean.append(float(entry[17]))
+		transz_min.append(float(entry[18]))
+		transz_max.append(float(entry[19].split('\n')[0]))
 		
 	#get mean and 
 	fmri_settings = parse_ini_file.parse_ini_file('fmri_settings')
@@ -265,10 +274,26 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 		translation_z_height=20
 		translation_z_fontsize=4
 		translation_z_tickrota=90
+
 	min_rot = float(max(max(rotx_min),max(roty_min),max(rotz_min)))-0.05
 	max_rot = float(max(max(rotx_max),max(roty_max),max(rotz_max)))+0.05
 	min_trans = float(max(max(transx_min),max(transy_min),max(transz_min)))-1
 	max_trans = float(max(max(transx_max),max(transy_max),max(transz_max)))+1
+
+	#calculate mean und std.
+	auto_rot_x_mean = numpy.mean(rotx_mean)
+	auto_rot_x_std = numpy.std(rotx_mean) * float(std_automatic_multiplier)
+	auto_rot_y_mean = numpy.mean(roty_mean)
+	auto_rot_y_std = numpy.std(roty_mean) * float(std_automatic_multiplier)
+	auto_rot_z_mean = numpy.mean(rotz_mean)
+	auto_rot_z_std = numpy.std(rotz_mean) * float(std_automatic_multiplier)
+	auto_trans_x_mean = numpy.mean(transx_mean)
+	auto_trans_x_std = numpy.std(transx_mean) * float(std_automatic_multiplier)
+	auto_trans_y_mean = numpy.mean(transy_mean)
+	auto_trans_y_std = numpy.std(transy_mean) * float(std_automatic_multiplier)
+	auto_trans_z_mean = numpy.mean(transz_mean)
+	auto_trans_z_std = numpy.std(transz_mean) * float(std_automatic_multiplier)
+
 
 	matplotlib.pyplot.figure(figsize=(rotation_pitch_width,rotation_pitch_height))
 	matplotlib.pyplot.plot(numElements, rotx_mean, 'bo',markersize=2)
@@ -280,12 +305,19 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Name')
 	axes.set_ylabel('Rotation in rads')
-	axes.axhspan(minus_settings_rot, plus_settings_rot, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((auto_rot_x_mean-auto_rot_x_std), (auto_rot_x_mean+auto_rot_x_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_settings_rot, plus_settings_rot, alpha=0.5, color='green')
 	axes.set_ylim([min_rot,max_rot])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Rotation range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=rotation_pitch_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean rotation +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=rotation_pitch_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Rotation range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=rotation_pitch_fontsize)
 	matplotlib.pyplot.savefig('Rotation_Pitch')
 
 	matplotlib.pyplot.figure(figsize=(rotation_roll_width,rotation_roll_height))
@@ -298,12 +330,19 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Name')
 	axes.set_ylabel('Rotation in rads')
-	axes.axhspan(minus_settings_rot, plus_settings_rot, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((auto_rot_y_mean-auto_rot_y_std), (auto_rot_y_mean+auto_rot_y_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_settings_rot, plus_settings_rot, alpha=0.5, color='green')
 	axes.set_ylim([min_rot,max_rot])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Rotation range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=rotation_roll_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean rotation +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=rotation_roll_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Rotation range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=rotation_roll_fontsize)
 	matplotlib.pyplot.savefig('Rotation_Roll')
 
 	matplotlib.pyplot.figure(figsize=(rotation_yaw_width,rotation_yaw_height))
@@ -316,13 +355,21 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Name')
 	axes.set_ylabel('Rotation in rads')
-	axes.axhspan(minus_settings_rot, plus_settings_rot, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((auto_rot_z_mean-auto_rot_z_std), (auto_rot_z_mean+auto_rot_z_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_settings_rot, plus_settings_rot, alpha=0.5, color='green')
 	axes.set_ylim([min_rot,max_rot])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Rotation range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=rotation_yaw_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean rotation +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=rotation_yaw_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Rotation range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=rotation_yaw_fontsize)
 	matplotlib.pyplot.savefig('Rotation_Yaw')
+
 
 	matplotlib.pyplot.figure(figsize=(translation_x_width,translation_x_height))
 	matplotlib.pyplot.plot(numElements, transx_mean, 'bo',markersize=2)
@@ -334,13 +381,21 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Name')
 	axes.set_ylabel('Translation in mm')
-	axes.axhspan(minus_settings_trans, plus_settings_trans, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((auto_trans_x_mean-auto_trans_x_std), (auto_trans_x_mean+auto_trans_x_std), alpha=0.5, color='blue')
+	else:	
+		axes.axhspan(minus_settings_trans, plus_settings_trans, alpha=0.5, color='green')
 	axes.set_ylim([min_trans,max_trans])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Translation range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=translation_x_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean translation +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=translation_x_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Translation range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=translation_x_fontsize)
 	matplotlib.pyplot.savefig('Translation_X')
+
 
 	matplotlib.pyplot.figure(figsize=(translation_y_width,translation_y_height))
 	matplotlib.pyplot.plot(numElements, transy_mean, 'bo',markersize=2)
@@ -352,12 +407,19 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Name')
 	axes.set_ylabel('Translation in mm')
-	axes.axhspan(minus_settings_trans, plus_settings_trans, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((auto_trans_y_mean-auto_trans_y_std), (auto_trans_y_mean+auto_trans_y_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_settings_trans, plus_settings_trans, alpha=0.5, color='green')
 	axes.set_ylim([min_trans,max_trans])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Translation range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=translation_y_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean translation +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=translation_y_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Translation range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=translation_y_fontsize)
 	matplotlib.pyplot.savefig('Translation_Y')
 
 	matplotlib.pyplot.figure(figsize=(translation_z_width,translation_z_height))
@@ -370,10 +432,20 @@ def read_values_file(functional_result_directory, number_of_shown_values):
 	axes.set_xlim([-0.5,float(number_of_shown_values)+0.5])
 	axes.set_xlabel('Name')
 	axes.set_ylabel('Translation in mm')
-	axes.axhspan(minus_settings_trans, plus_settings_trans, alpha=0.5, color='green')
+	if automatic_flag:
+		axes.axhspan((auto_trans_z_mean-auto_trans_z_std), (auto_trans_z_mean+auto_trans_z_std), alpha=0.5, color='blue')
+	else:
+		axes.axhspan(minus_settings_trans, plus_settings_trans, alpha=0.5, color='green')
 	axes.set_ylim([min_trans,max_trans])
 	axes.yaxis.grid()
 	matplotlib.pyplot.tight_layout()
-	green_patch = matplotlib.patches.Patch(color='green', label='Translation range value')
-	matplotlib.pyplot.legend(handles=[green_patch], fontsize=translation_z_fontsize)
+	if automatic_flag:
+		blue_patch = matplotlib.patches.Patch(color='blue', label='Mean translation +/- std')
+		matplotlib.pyplot.legend(handles=[blue_patch], fontsize=translation_z_fontsize)
+	else:
+		green_patch = matplotlib.patches.Patch(color='green', label='Translation range value')
+		matplotlib.pyplot.legend(handles=[green_patch], fontsize=translation_z_fontsize)
 	matplotlib.pyplot.savefig('Translation_Z')
+
+
+

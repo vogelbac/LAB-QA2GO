@@ -21,6 +21,7 @@ def main(result_folder):
 					html_file = open(result_folder + i+'/' + j+'/results.html','w')
 					value_file = open(result_folder + i+'/' + j+'/values_'+j+'.txt','r')
 					report_file = open(result_folder + i+'/' + j+'/report_'+j+'.txt','r')
+					
 					#read reportfile
 					report_file_list = []
 					for line in report_file:
@@ -33,6 +34,31 @@ def main(result_folder):
 
 					html_file.writelines(menu_html)
 					html_file.write('\t\t<h1 style="margin-top:80px;">Result Gel-Phantom '+j+'</h1>\n')
+
+
+					html_file.write('\t\t<h1>DICOM header comparison</h1>\n')
+					try:
+						header_file = open(result_folder + i+'/' + j+'/header.txt','r')
+						html_file.write('\t\t<table>\n\t\t\t<th><td colspan="3"><b>DICOM header comparison</b></td></th>')
+
+						html_file.write('\t\t\t<tr><td><b>Field name</b></td><td><b>Reference value</b></td><td><b>Value in data</b></td></tr>\n')
+						for k in header_file:
+							header_line = k.split(';')
+							if len(header_line) == 3:
+								html_file.write('\t\t\t<tr><td><i>'+header_line[0]+'</i></td><td>'+header_line[1]+'</td><td>'+header_line[2]+'</td></tr>\n')
+							else:
+								header_line2 = k.split(',')
+								if len(header_line2) == 3:
+									html_file.write('\t\t\t<tr><td><i>'+header_line2[0]+'</i></td><td>'+header_line2[1]+'</td><td>'+header_line2[2]+'</td></tr>\n')
+
+						html_file.write('\t\t</table>\n')
+						html_file.write('\t\t<p></p>\n')
+						
+						header_file.close()
+					except:
+						html_file.write('\t\t<p>No differences between headers or no DICOM file to compare available.</p>\n')
+
+
 
 					html_file.write('\t\t<table>\n\t\t\t<tr bgcolor=#f6f6f6>\n\t\t\t\t<td><b>Measurement day</b></td><td>'+report_file_list[1]+'-'+report_file_list[3]+'-'+report_file_list[5]+'</td><td><b>Measurement time</b></td><td>'+report_file_list[7]+':'+report_file_list[9]+'</td>\n\t\t\t</tr>\n')
 					html_file.write('\t\t\t<tr bgcolor=#ffffff>\n\t\t\t\t<td><b>Helium</b></td><td>'+report_file_list[13]+' %</td><td><b>Temperature</b></td><td>'+report_file_list[15]+' &deg; C</td>\n\t\t\t</tr>\n')
@@ -86,3 +112,6 @@ def main(result_folder):
 					html_file.close()
 					value_file.close()
 					report_file.close()
+
+
+main('/home/brain/qa/html/results/gel/')

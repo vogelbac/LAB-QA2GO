@@ -13,6 +13,8 @@ def parse_ini_file(option):
 		return_array.append(content[index+6].split('=')[1])
 		return_array.append(content[index+7].split('=')[1])
 		return_array.append(content[index+8].split('=')[1])
+		return_array.append(content[index+9].split('=')[1])
+		return_array.append(content[index+10].split('=')[1])
 	
 	elif option == 'phantom_settings':
 		ini_file = open('/home/brain/qa/html/configuration/gel_phantom.ini','r')
@@ -33,6 +35,8 @@ def parse_ini_file(option):
 		return_array.append(content[index+11].split('=')[1])
 		return_array.append(content[index+12].split('=')[1])
 		return_array.append(content[index+13].split('=')[1])
+		return_array.append(content[index+14].split('=')[1])
+		return_array.append(content[index+15].split('=')[1])
 
 
 	elif option == 'genral_settings':
@@ -74,6 +78,8 @@ def parse_ini_file(option):
 		return_array.append(content[index+1].split('=')[1])
 		return_array.append(content[index+2].split('=')[1])
 		return_array.append(content[index+3].split('=')[1])
+		return_array.append(content[index+4].split('=')[1])
+		return_array.append(content[index+5].split('=')[1])
 
 		
 	ini_file.close()
