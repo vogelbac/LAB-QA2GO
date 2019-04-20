@@ -13,7 +13,7 @@ LAB–QA2GO  - A free, easy-to-use toolbox for the  quality assessment of magnet
 LAB–QA2GO is a light-weighted virtual machine which provides scripts for fully automated QA analyses of phantom and human datasets. This virtual machine is ready for analysis by starting it the first time. With minimal configuration in the guided web-interface the first analysis can start within 10 minutes, while adapting to local phantoms and needs is easily possible.
 
 # Download
-The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.virtualbox.org/ "Official Virtual Box Site"). The image can be downloaded [here](https://osf.io/cqfpx/download "LAB-QA2GO download page on OSF"). After downloading the tool, you have to integrate the virtual machine into your Virtual Box client.
+The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.virtualbox.org/ "Official Virtual Box Site"). The image can be downloaded [here](https://osf.io/q3as2/download "LAB-QA2GO download page on OSF"). After downloading the tool, you have to integrate the virtual machine into your Virtual Box client.
 
 # Quick Installation Guide
 ## Download
@@ -52,7 +52,10 @@ A set of sample data can be downloaded [here](http://www.online.uni-marburg.de/q
 
 # Versions
 ## current version
-The current version is 0.7.
+The current version is 0.8.
+### updates to version 0.7
+- DICOM header comparision with a preuploaded DICOM reference file.
+- For the overview graphs we added the option to define the ranges based on the data.
 
 # Feedback
 This is the first version of this tool. It is adapted to the data of our MRI lab at the University of Marburg. If you got a problem or questions just contact me, so that I can help you.
