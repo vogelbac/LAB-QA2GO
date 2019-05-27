@@ -51,6 +51,8 @@ The LAB–QA2GO tool is a virtual machine based on [Virtual Box](https://www.vir
 A set of sample data can be downloaded [here](http://www.online.uni-marburg.de/quamri/labqa2go/LABQA2GO_sample_data.zip "LAB-QA2GO sample data").  
 
 # Versions
+A list of all LAB-QA2GO versions is listed [here](https://osf.io/qpn47/files/ "LAB-QA2GO OSF").
+
 ## current version
 The current version is 0.81.
 ### updates to version 0.8
@@ -74,7 +76,8 @@ LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic 
 Christoph Vogelbacher, Miriam H. A. Bopp, Verena Schuster, Peer Herholz, Jens Sommer, Andreas Jansen
 bioRxiv 546564; doi: https://doi.org/10.1101/546564
 
-
+# Acknowledgement
+We would like to thank our collaborators [Bhalerao Gaurav Vivek](https://github.com/gvbhalerao591 "Bhalerao Gaurav Vivek Github page")  Bhalerao Gaurav Vivek and Pravesh Parekh[Pravesh Parekh](https://github.com/parekhpravesh "Pravesh Parekh Github page") from National Institute of Mental Health and Neurosciences (NIMHANS) Bengaluru, India. 
 
 # Support
 [Laboratory for Multimodal Neuroimaging | LMN](http://lmn-marburg.de/index.php/de/)
@@ -82,4 +85,4 @@ bioRxiv 546564; doi: https://doi.org/10.1101/546564
 [Philipps-Universität Marburg](https://www.uni-marburg.de/en)
 
 # Copyright
-Copyright 2015-2019, Christoph Vogelbacher. Last updated on 2019-02-06.
+Copyright 2015-2019, Christoph Vogelbacher. Last updated on 2019-05-27.
