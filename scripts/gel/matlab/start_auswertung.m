@@ -66,12 +66,12 @@ function start_auswertung(file,phantom_name_in,in_phantom_year,in_phantom_month,
     
     % Größen für Colormaps
     % definiert die Range von 0-1500
-    color_min = 0; 
-    color_max = 1500;
-    color_max_temp = 6;
-    color_max_signal_fluct = 300;
-    color_min_static_signal = -250;
-    color_max_static_signal = 250;
+    % color_min = 0; 
+    % color_max = 1500;
+    % color_max_temp = 6;
+    % color_max_signal_fluct = 300;
+    % color_min_static_signal = -250;
+    % color_max_static_signal = 250;
     
     
     % Definiert, wie viele Zeitserien zur Auswertung weggeworfen werden.
@@ -95,7 +95,7 @@ function start_auswertung(file,phantom_name_in,in_phantom_year,in_phantom_month,
 
     
     % zur Berechnung die Maske verwenden ja (1) oder nein (0)?
-    use_mask = 0;
+    use_mask = 1; % If use_mask==0 then line 101 won't be evaluated and bubble_mask will be the entire image
     bubble_mask = ones(dim1,dim2,dim3,dim4);
     
     if use_mask == 1
@@ -145,7 +145,7 @@ function start_auswertung(file,phantom_name_in,in_phantom_year,in_phantom_month,
     name = strcat('Signal_Image_', phantom_name);
     set(f,'Name',name);
     imagesc(signal_img);
-    set(gca, 'CLim', [color_min, color_max]);
+    set(gca, 'CLim', [min(signal_img(:)), max(signal_img(:))]); % letting image decide the minimum and maximum 
     colorbar
     print(f,name,'-dpng');
     
@@ -160,7 +160,7 @@ function start_auswertung(file,phantom_name_in,in_phantom_year,in_phantom_month,
     name = strcat('Temporal_Fluctuation_Noise_Image_', phantom_name);
     set(f,'Name',name);
     imagesc(temporal_fluctuation_noise_img);
-    set(gca, 'CLim', [0, color_max_temp]);
+    set(gca, 'CLim', [0, max(temporal_fluctuation_noise_img(:))]); % letting image decide the maximum 
     colorbar
     print(f,name,'-dpng');
     
@@ -184,7 +184,7 @@ function start_auswertung(file,phantom_name_in,in_phantom_year,in_phantom_month,
     name = strcat('Signal_To_Fluictuation_Noise_Image_ROI_', phantom_name);
     set(f,'Name',name);
     imagesc(sfnr_img);
-    set(gca, 'CLim', [0, color_max_signal_fluct]);
+    set(gca, 'CLim', [0, max(sfnr_img(:))]); % letting image decide the maximum 
     colorbar
 
     print(f,name,'-dpng');
@@ -200,7 +200,7 @@ function start_auswertung(file,phantom_name_in,in_phantom_year,in_phantom_month,
     name = strcat('Static_Spatial_Noise_Image_', phantom_name);
     set(f,'Name',name);
     imagesc(diff_img);
-    set(gca, 'CLim', [color_min_static_signal, color_max_static_signal]);
+    set(gca, 'CLim', [min(diff_img(:)), max(diff_img(:))]);
     colorbar
 
     print(f,name,'-dpng');
