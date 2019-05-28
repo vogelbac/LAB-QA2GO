@@ -136,7 +136,7 @@ function  [ mean_piu_value,min_piu_value,max_piu_value,std_piu_value] = piu(use_
         for t=remove_time_series+1:dim4
             min_x = 0;
             min_y = 0;
-            min_mean = 5000;
+            min_mean = 10^7; % arbitrary large number so that data of any scaling can be handled (such as Philips precise scaling)
 
             max_x = 0;
             max_y = 0;
