@@ -181,7 +181,7 @@ function return_value  = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,r
             end
 
 
-            ghost_phantom_mean = mean(reshape(image(ghost_phantom_roi_x_start:ghost_phantom_roi_x_ende,ghost_phantom_roi_y_start:ghost_phantom_roi_y_start,soi,t),[],1));
+            ghost_phantom_mean = mean(reshape(image(ghost_phantom_roi_x_start:ghost_phantom_roi_x_ende,ghost_phantom_roi_y_start:ghost_phantom_roi_y_ende,soi,t),[],1));
 
             
             % Signal zu maximum ghost ratio in Frequenz richtung
