@@ -62,7 +62,10 @@ The current version is 0.81.
 - For the overview graphs we added the option to define the ranges based on the data.
 
 # Feedback
-This is the first version of this tool. It is adapted to the data of our MRI lab at the University of Marburg. If you got a problem or questions just contact me, so that I can help you.
+This is the first version of this tool. It is adapted to the data of our MRI lab at the University of Marburg. If you got a problem or questions just contact me, so that we can help you.
+
+## Slack
+You can contact us using slack. Our channel is available at https://lab-qa2go.slack.com/. Feel free to contact us to invite you to this channel.
 
 # License
 LAB-QA2GO is licensed under the BSD license for phantom data analysis.
