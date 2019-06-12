@@ -65,7 +65,8 @@ The current version is 0.81.
 This is the first version of this tool. It is adapted to the data of our MRI lab at the University of Marburg. If you got a problem or questions just contact me, so that we can help you.
 
 ## Slack
-You can contact us using slack. Our channel is available at https://lab-qa2go.slack.com/. Feel free to contact us to invite you to this channel.
+You can contact us using slack. Our channel is available at https://lab-qa2go.slack.com/. Feel free to contact us to invite you to this channel. You can join the channel [here](https://join.slack.com/t/lab-qa2go/shared_invite/enQtNjUxMTQ4Njg4MTMxLTgyNjViN2MzZWQxYTkyNjlhZWJjOGUxZjI3MTcwMjQwOTllY2RlNjA1MjA5NjBjMzMyZWVkMDY4YTkyMWQ3NGY "LAB-QA2GO slack channel").
+
 
 # License
 LAB-QA2GO is licensed under the BSD license for phantom data analysis.
