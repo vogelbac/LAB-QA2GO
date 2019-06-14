@@ -218,7 +218,7 @@ function start_auswertung(file,phantom_name_in,in_phantom_year,in_phantom_month,
 %     
 %     %ghosting 
 
-    ghosting = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,remove_time_series,roi_ghost_length,phantom_name,bin_mask_phantom );
+    [ghosting, roi_ghost_length] = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,remove_time_series,roi_ghost_length,phantom_name,bin_mask_phantom );
 
     [mean_psg,psg_signal_image] = psg( bin_mask_phantom,dim1,dim2,dim3,dim4,image,phantom_name,roi_length,remove_time_series,soi,signal_img,ghost_roi_length );
     
