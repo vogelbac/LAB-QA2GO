@@ -5,9 +5,13 @@
 %% A ROI is placed in the center of the phantom to calculate then the different signal to ghosting values.
 %%
 
-function return_value  = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,remove_time_series,roi_ghost_length,phantom_name,bin_mask_phantom )
+function [return_value, roi_ghost_length]  = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,remove_time_series,roi_ghost_length,phantom_name,bin_mask_phantom )
 
-
+% Running code in a perpetual try-catch form till we can calculate ghosting
+% or till the roi_ghost_length is a positive number
+error_val = true;
+while error_val
+    try
         % Binärbild für jede SOI für jeden Zeitpunkt erzeugen
 
 
@@ -92,7 +96,11 @@ function return_value  = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,r
 
             %mean ghost für zeitpunkt berechnen
             mean_ghost_freq = temp_mean_ghost_freq / temp_mean_ghost_freq_counter;
-
+            
+            % Throw up error if calculation failed
+            if isnan(mean_ghost_freq) || temp_mean_ghost_freq == 0 || temp_mean_ghost_freq_counter == 0
+                error('Error');
+            end
 
             ghost_mean = 0;
             ghost_x_start = 0;
@@ -132,6 +140,11 @@ function return_value  = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,r
 
             % mean ghost berechnen
             mean_ghost_phase = temp_mean_ghost_phase / temp_mean_ghost_phase_counter;
+            
+            % Throw up error if calculation failed
+            if isnan(mean_ghost_phase) || temp_mean_ghost_phase == 0 || temp_mean_ghost_phase_counter == 0
+                error('Error');
+            end
 
             % 10x10 roi im Phantom berechnen % Werte finden die > 0 sind
             %in Y Richtung (oben / unten)
@@ -201,6 +214,17 @@ function return_value  = ghosting_detection( use_mask,image,dim1,dim2,soi,dim4,r
             signal_to_mean_ghost_ratio_phase_array(t-remove_time_series) = signal_to_mean_ghost_ratio_phase;
 
         end
+        error_val = false;
+    catch
+        % Reduce the length of roi_ghost_length by 1 and try again
+        disp(['Ghosting detection calculation failed at; ', num2str(roi_ghost_length), '; trying ', num2str(roi_ghost_length-1)]);
+        roi_ghost_length = roi_ghost_length - 1;
+        if roi_ghost_length <= 0
+            disp('Ghosting detection calculation failed; terminating');
+            break
+        end
+    end
+end
 
         %plot timeline
         timeseries = [(remove_time_series+1):dim4];
