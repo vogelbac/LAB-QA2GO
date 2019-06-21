@@ -80,6 +80,9 @@ LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic 
 Christoph Vogelbacher, Miriam H. A. Bopp, Verena Schuster, Peer Herholz, Jens Sommer, Andreas Jansen
 bioRxiv 546564; doi: https://doi.org/10.1101/546564
 
+# Poster
+Vogelbacher, Christoph; Bopp, Miriam; Schuster, Verena; Herholz, Peer; Jansen, Andreas; Sommer, Jens (2019): LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data. figshare. Poster on OHBM 2019. https://doi.org/10.6084/m9.figshare.8305964.v2
+
 # Acknowledgement
 We would like to thank our collaborators [Bhalerao Gaurav Vivek](https://github.com/gvbhalerao591 "Bhalerao Gaurav Vivek Github page")  and [Pravesh Parekh](https://github.com/parekhpravesh "Pravesh Parekh Github page") from National Institute of Mental Health and Neurosciences (NIMHANS) Bengaluru, India. 
 
