@@ -75,12 +75,16 @@ For human data analysis [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Licence "FS
 
 Furthermore LAB-QA2GO is not intended as a clinical tool. It does not replace maintenance by a trained / skilled professional.
 
-# Preprint
+# Publications
+When using MRIQC, please include the following citation:
+Vogelbacher, C., Bopp, M. H., Schuster, V., Herholz, P., Jansen, A., & Sommer, J. (2019). LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data. Frontiers in Neuroscience, 13, 688. doi: https://doi.org/10.3389/fnins.2019.00688
+
+## Preprint
 LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data
 Christoph Vogelbacher, Miriam H. A. Bopp, Verena Schuster, Peer Herholz, Jens Sommer, Andreas Jansen
 bioRxiv 546564; doi: https://doi.org/10.1101/546564
 
-# Poster
+## Poster
 Vogelbacher, Christoph; Bopp, Miriam; Schuster, Verena; Herholz, Peer; Jansen, Andreas; Sommer, Jens (2019): LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data. figshare. Poster on OHBM 2019. https://doi.org/10.6084/m9.figshare.8305964.v2
 
 # Acknowledgement
