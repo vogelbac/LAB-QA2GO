@@ -77,6 +77,7 @@ Furthermore LAB-QA2GO is not intended as a clinical tool. It does not replace ma
 
 # Publications
 When using MRIQC, please include the following citation:
+
 Vogelbacher, C., Bopp, M. H., Schuster, V., Herholz, P., Jansen, A., & Sommer, J. (2019). LAB–QA2GO: A free, easy-to-use toolbox for the quality assessment of magnetic resonance imaging data. Frontiers in Neuroscience, 13, 688. doi: https://doi.org/10.3389/fnins.2019.00688
 
 ## Preprint
